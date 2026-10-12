@@ -30,31 +30,81 @@
 
 ---------------------------------------------------------------------------------------]]--
 
+---@param source string
+---@param target number | string
+local function canHandleEvent(source, target)
+	if not source or not target then
+		return false
+	end
+
+	if not DoesPlayerExist(target) then
+		return false
+	end
+
+	local srcPed = GetPlayerPed(source)
+	local vehicle = GetVehiclePedIsIn(srcPed, false)
+	if vehicle == 0 or not DoesEntityExist(vehicle) then
+		return false
+	end
+
+	local targetPed = GetPlayerPed(target)
+	if vehicle ~= GetVehiclePedIsIn(targetPed, false) then
+		return false
+	end
+
+	return true
+end
+
+
 --[[----------------------------------------------------------------------------------
 	Sync server events
 ----------------------------------------------------------------------------------]]--
 RegisterNetEvent( "wk_wars2x_sync:sendPowerState" )
 AddEventHandler( "wk_wars2x_sync:sendPowerState", function( target, state )
+	local stateType = type(state)
+	if stateType ~= "number" and stateType ~="boolean" then
+		return
+	end
+
+	if not canHandleEvent(source, target) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:receivePowerState", target, state )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendAntennaPowerState" )
 AddEventHandler( "wk_wars2x_sync:sendAntennaPowerState", function( target, state, ant )
+	if not canHandleEvent(source, target) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:receiveAntennaPowerState", target, state, ant )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendAntennaMode" )
 AddEventHandler( "wk_wars2x_sync:sendAntennaMode", function( target, ant, mode )
+	if not canHandleEvent(source, target) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:receiveAntennaMode", target, ant, mode )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendLockAntennaSpeed" )
 AddEventHandler( "wk_wars2x_sync:sendLockAntennaSpeed", function( target, ant, data )
+	if not canHandleEvent(source, target) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:receiveLockAntennaSpeed", target, ant, data )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendLockCameraPlate" )
 AddEventHandler( "wk_wars2x_sync:sendLockCameraPlate", function( target, cam, data )
+	if not canHandleEvent(source, target) then
+		return
+	end
 	TriggerClientEvent( "wk_wars2x_sync:receiveLockCameraPlate", target, cam, data )
 end )
 
@@ -64,15 +114,26 @@ end )
 ----------------------------------------------------------------------------------]]--
 RegisterNetEvent( "wk_wars2x_sync:requestRadarData" )
 AddEventHandler( "wk_wars2x_sync:requestRadarData", function( target )
+	if not canHandleEvent(source, target) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:getRadarDataFromDriver", target, source )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendRadarDataForPassenger" )
 AddEventHandler( "wk_wars2x_sync:sendRadarDataForPassenger", function( playerFor, data )
+	if not canHandleEvent(source, playerFor) then
+		return
+	end
+
 	TriggerClientEvent( "wk_wars2x_sync:receiveRadarData", playerFor, data )
 end )
 
 RegisterNetEvent( "wk_wars2x_sync:sendUpdatedOMData" )
 AddEventHandler( "wk_wars2x_sync:sendUpdatedOMData", function( playerFor, data )
+	if not canHandleEvent(source, playerFor) then
+		return
+	end
 	TriggerClientEvent( "wk_wars2x_sync:receiveUpdatedOMData", playerFor, data )
 end )
