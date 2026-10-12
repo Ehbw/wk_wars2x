@@ -308,12 +308,12 @@ function setAntennaXmit( ant, state )
 	// Clear the antenna's directional arrows and speeds, display "HLd" in the fast box
 	if ( !state ) {
 		clearDirs( ant ); 
-		elements.antennas[ant].targetSpeed.html( "¦¦¦" );
-		elements.antennas[ant].fastSpeed.html( "HLd" ); 
+		elements.antennas[ant].targetSpeed.text( "¦¦¦" );
+		elements.antennas[ant].fastSpeed.text( "HLd" ); 
 		
 	// Blank the fast box when the antenna is set to transmit 
 	} else {
-		elements.antennas[ant].fastSpeed.html( "¦¦¦" ); 
+		elements.antennas[ant].fastSpeed.text( "¦¦¦" ); 
 	}
 }
 
@@ -398,7 +398,7 @@ function setPlate( cam, plate, index )
 
 	// Update all of the p elements with the new plate 
 	pl.text.find( "p" ).each( function( i, obj ) {
-		$( this ).html( plate );
+		$( this ).text( plate );
 	} );
 }
 
@@ -442,17 +442,17 @@ function clearAntenna( ant )
 	clearDirs( ant );
 
 	// Blank the target speed box 
-	elements.antennas[ant].targetSpeed.html( "¦¦¦" );
+	elements.antennas[ant].targetSpeed.text( "¦¦¦" );
 	
 	// Blank the fast speed box
-	elements.antennas[ant].fastSpeed.html( "¦¦¦" );
+	elements.antennas[ant].fastSpeed.text( "¦¦¦" );
 }
 
 // Clears all the elements on the radar's UI
 function clearEverything()
 {
 	// Blank the patrol speed
-	elements.patrolSpeed.html( "¦¦¦" ); 
+	elements.patrolSpeed.text( "¦¦¦" ); 
 
 	// Blank both the antennas
 	for ( let i in elements.antennas ) 
@@ -469,7 +469,7 @@ function clearEverything()
 function poweringUp()
 {
 	// Set the patrol speed container to be fully lit
-	elements.patrolSpeed.html( "888" ); 
+	elements.patrolSpeed.text( "888" ); 
 
 	// Iterate through the front and rear antenna elements
 	for ( let i of [ "front", "rear" ] )
@@ -478,8 +478,8 @@ function poweringUp()
 		let e = elements.antennas[i];
 
 		// Set the target and fast speed box to be fully lit
-		e.targetSpeed.html( "888" ); 
-		e.fastSpeed.html( "888" ); 
+		e.targetSpeed.text( "888" ); 
+		e.fastSpeed.text( "888" ); 
 
 		// Iterate through the rest of the antenna's elements 
 		for ( let a of [ "dirs", "modes", "fast" ] )
@@ -555,7 +555,7 @@ function playLockAudio( ant, dir, vol )
 function updateDisplays( ps, ants )
 {
 	// Update the patrol speed
-	elements.patrolSpeed.html( ps );
+	elements.patrolSpeed.text( ps );
 
 	// Iterate through the antenna data 
 	for ( let ant in ants ) 
@@ -566,8 +566,8 @@ function updateDisplays( ps, ants )
 			let e = elements.antennas[ant]; 
 
 			// Update the target and fast speeds
-			e.targetSpeed.html( ants[ant][0].speed ); 
-			e.fastSpeed.html( ants[ant][1].speed ); 
+			e.targetSpeed.text( ants[ant][0].speed ); 
+			e.fastSpeed.text( ants[ant][1].speed ); 
 
 			// Update the directional arrows
 			setAntennaDirs( ant, ants[ant][0].dir, ants[ant][1].dir );
@@ -598,11 +598,11 @@ function menu( optionText, option )
 	clearEverything(); 
 
 	// Set the target and fast box to the option text
-	elements.antennas.front.targetSpeed.html( optionText[0] );
-	elements.antennas.front.fastSpeed.html( optionText[1] );
+	elements.antennas.front.targetSpeed.text( optionText[0] );
+	elements.antennas.front.fastSpeed.text( optionText[1] );
 
 	// Set the patrol speed to the value 
-	elements.patrolSpeed.html( option );
+	elements.patrolSpeed.text( option );
 }
 
 var keyLockTimeout; 
@@ -613,7 +613,7 @@ function displayKeyLock( state )
 	let sl = elements.keyLock.stateLabel; 
 
 	// Set the state label text to enabled or disabled
-	sl.html( state ? "blocked" : "enabled" );
+	sl.text( state ? "blocked" : "enabled" );
 
 	// Change the colour of the altered text 
 	state ? sl.addClass( "red" ).removeClass( "green" ) : sl.addClass( "green" ).removeClass( "red" );
@@ -947,7 +947,7 @@ elements.safezoneSlider.on( "input", function() {
 	let val = $( this ).val();
 	safezone = parseInt( val, 10 ); 
 
-	elements.safezoneDisplay.html( val + "px" ); 
+	elements.safezoneDisplay.text( val + "px" ); 
 } )
 
 function calculatePos( ele, x, y, w, h, offset, scale, safezone )
@@ -1004,7 +1004,7 @@ function changeEleScale( ele, scaleVar, amount, display )
 {
 	// Change the scale of the element and update it's displayer
 	let scale = changeScale( ele, scaleVar, amount ); 
-	display.html( scale.toFixed( 2 ) + "x" );
+	display.text( scale.toFixed( 2 ) + "x" );
 
 	// Tell the system the UI has been edited
 	setUiHasBeenEdited( true ); 
@@ -1023,7 +1023,7 @@ function changeScale( ele, current, amount )
 function setScaleAndDisplay( ele, scale, display )
 {
 	ele.css( "transform", "scale(" + scale + ")" );
-	display.html( scale.toFixed( 2 ) + "x" );
+	display.text( scale.toFixed( 2 ) + "x" );
 }
 
 function clamp( num, min, max )
